@@ -11,7 +11,6 @@ import jax.numpy as jnp
 import tensorly as tl
 from scipy.stats import norm as normal
 from scipy.special import *
-from scipy.io import loadmat
 
 
 np.random.seed(0)

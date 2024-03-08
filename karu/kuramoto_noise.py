@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 from jax.lib import xla_bridge
 from numpy import random
 import numpy as np
@@ -40,8 +39,7 @@ class EQD:
   
     def init_spike_and_slab(self):
         self.tau = 500
-        self.rho = logit(0.4)    #这个不对解的慢?
-
+        self.rho = logit(0.4)    
         self.tol = 1e-8
         self.damping = 0.9
         self.s0 = 1.0
@@ -159,7 +157,6 @@ class EQD:
         library = jnp.concatenate((u * u_dx1, u_ddx1, u_ddddx1, u_dx1, u_dddx1, u, u**2, u**3, u**4, u**2 * u_dx1, u**3 * u_dx1, u**4 * u_dx1, u * u_ddx1, u**2 * u_ddx1, u**3 * u_ddx1, u**4 * u_ddx1,
                                    u * u_dddx1, u**2 * u_dddx1, u**3 * u_dddx1, u**4 * u_dddx1, u * u_ddddx1, u**2 * u_ddddx1, u**3 * u_ddddx1, u**4 * u_ddddx1),
                                   axis=0)
-
         return library, u_dx2
 
     def spike_and_slab_EP(self, params):
@@ -215,8 +212,7 @@ class EQD:
         for i in range(self.num_operators):
             if i in big_inds:
                 if self.sel_prob[ind] >= 0.1:
-                    new_mu[i] = self.mu[ind]
-                    
+                    new_mu[i] = self.mu[ind]          
                 else:
                     self.mu_full[i] = 0
                 ind = ind + 1
@@ -247,12 +243,9 @@ class EQD:
                 optimizer2 = optax.adam(5e-4)
                 opt_state = optimizer2.init(params_f)
                 optimizer = optimizer2
-
             if (i + 1) <= start_EQD and (i + 1) % 100 == 0:
                 print(i)
-
             if (i + 1) % 100 == 0 and (i + 1) > start_EQD:
-                
                 print("Learned ", w)
             if (i + 1) % EQD_interval == 0 and (i + 1) > start_EQD:
                 w = self.spike_and_slab_EP(params_f)
